@@ -1,0 +1,274 @@
+[
+  {
+    "id": "9d1917f16b83f38f",
+    "type": "tab",
+    "label": "Fluxo 1",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "2c0786e9e7071a68",
+    "type": "inject",
+    "z": "9d1917f16b83f38f",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "Olá, RAIOS!",
+    "payloadType": "str",
+    "x": 130,
+    "y": 100,
+    "wires": [
+      [
+        "49a04e40cf672a9b"
+      ]
+    ]
+  },
+  {
+    "id": "e7776c2a6311cd22",
+    "type": "ui-text",
+    "z": "9d1917f16b83f38f",
+    "group": "f6abc66501bef3ca",
+    "order": 1,
+    "width": "3",
+    "height": "1",
+    "name": "Demanda do posto",
+    "label": "",
+    "format": "{{msg.payload}}",
+    "layout": "row-center",
+    "style": true,
+    "font": "",
+    "fontSize": 16,
+    "color": "#717171",
+    "wrapText": false,
+    "className": "",
+    "value": "payload",
+    "valueType": "msg",
+    "x": 550,
+    "y": 480,
+    "wires": [],
+    "inputLabels": [
+      "demanda"
+    ]
+  },
+  {
+    "id": "49a04e40cf672a9b",
+    "type": "debug",
+    "z": "9d1917f16b83f38f",
+    "name": "debug 1",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 520,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "50d90bd1af41b62b",
+    "type": "debug",
+    "z": "9d1917f16b83f38f",
+    "name": "debug 2",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 420,
+    "y": 300,
+    "wires": []
+  },
+  {
+    "id": "2ba3322d43b662ab",
+    "type": "function",
+    "z": "9d1917f16b83f38f",
+    "name": "mostrar-demanda",
+    "func": "let d = msg.payload;\nif (typeof d === \"string\") { try { d = JSON.parse(d); } catch (e) { node.warn(\"Payload MQTT não é JSON válido\"); return null; } }\nif (!d || typeof d.demanda_kw !== \"number\" || d.demanda_kw < 0) { node.warn(\"Campo demanda_kw ausente ou inválido\"); return null; }\nmsg.payload = d.demanda_kw.toFixed(2) + \" kW\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 350,
+    "y": 400,
+    "wires": [
+      [
+        "e7776c2a6311cd22"
+      ]
+    ]
+  },
+  {
+    "id": "fa78b921a2ee4cf6",
+    "type": "mqtt in",
+    "z": "9d1917f16b83f38f",
+    "name": "",
+    "topic": "raios/demo-8472/posto01/telemetria",
+    "qos": "2",
+    "datatype": "auto-detect",
+    "broker": "caf5ebf8dd3c54fe",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 170,
+    "y": 300,
+    "wires": [
+      [
+        "50d90bd1af41b62b",
+        "2ba3322d43b662ab"
+      ]
+    ]
+  },
+  {
+    "id": "f6abc66501bef3ca",
+    "type": "ui-group",
+    "name": "Demanda do posto",
+    "page": "e35ceb162cfd4c44",
+    "width": 6,
+    "height": 1,
+    "order": 1,
+    "showTitle": true,
+    "className": "",
+    "visible": "true",
+    "disabled": "false",
+    "groupType": "default"
+  },
+  {
+    "id": "caf5ebf8dd3c54fe",
+    "type": "mqtt-broker",
+    "name": "Broker_RAIOS_demo",
+    "broker": "test.mosquitto.org",
+    "port": 1883,
+    "clientid": "raios-node-red-gerente-a913c",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": 4,
+    "keepalive": 60,
+    "cleansession": true,
+    "autoUnsubscribe": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthRetain": "false",
+    "birthPayload": "",
+    "birthMsg": {},
+    "closeTopic": "",
+    "closeQos": "0",
+    "closeRetain": "false",
+    "closePayload": "",
+    "closeMsg": {},
+    "willTopic": "",
+    "willQos": "0",
+    "willRetain": "false",
+    "willPayload": "",
+    "willMsg": {},
+    "userProps": "",
+    "sessionExpiry": ""
+  },
+  {
+    "id": "e35ceb162cfd4c44",
+    "type": "ui-page",
+    "name": "Painel do gerente",
+    "ui": "2c5869bc6153f0ab",
+    "path": "/page1",
+    "icon": "home",
+    "layout": "grid",
+    "theme": "c751471f73e43d52",
+    "breakpoints": [
+      {
+        "name": "Default",
+        "px": "0",
+        "cols": "3"
+      },
+      {
+        "name": "Tablet",
+        "px": "576",
+        "cols": "6"
+      },
+      {
+        "name": "Small Desktop",
+        "px": "768",
+        "cols": "9"
+      },
+      {
+        "name": "Desktop",
+        "px": "1024",
+        "cols": "12"
+      },
+      {
+        "name": "",
+        "px": "",
+        "cols": ""
+      }
+    ],
+    "order": 1,
+    "className": "",
+    "visible": "true",
+    "disabled": "false"
+  },
+  {
+    "id": "2c5869bc6153f0ab",
+    "type": "ui-base",
+    "name": "My Dashboard",
+    "path": "/dashboard",
+    "appIcon": "",
+    "includeClientData": true,
+    "acceptsClientConfig": [
+      "ui-notification",
+      "ui-control"
+    ],
+    "showPathInSidebar": false,
+    "headerContent": "page",
+    "navigationStyle": "default",
+    "titleBarStyle": "default",
+    "showReconnectNotification": true,
+    "notificationDisplayTime": 1,
+    "showDisconnectNotification": true,
+    "allowInstall": false
+  },
+  {
+    "id": "c751471f73e43d52",
+    "type": "ui-theme",
+    "name": "Default Theme",
+    "colors": {
+      "surface": "#fcfcfd",
+      "primary": "#0d74ce",
+      "bgPage": "#f9f9fb",
+      "groupBg": "#ffffff",
+      "groupOutline": "#d9d9e0"
+    },
+    "sizes": {
+      "density": "default",
+      "pagePadding": "12px",
+      "groupGap": "12px",
+      "groupBorderRadius": "4px",
+      "widgetGap": "12px"
+    }
+  },
+  {
+    "id": "e67fb7dfa9446404",
+    "type": "global-config",
+    "env": [],
+    "modules": {
+      "@flowfuse/node-red-dashboard": "1.32.0"
+    }
+  }
+]
